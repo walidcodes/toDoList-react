@@ -1,46 +1,40 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Button, ListGroup } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-let initialKeys;
-let initialTasks;
+const initialKeys = [];
+for (let k = 3; k < 10; k++) initialKeys.push(k);
 
-if (localStorage.getItem("allKeys")) {
-  console.log(JSON.parse(localStorage.getItem("allKeys")));
-  initialKeys = JSON.parse(localStorage.getItem("allkeys"));
-} else {
-  initialKeys = [];
-  for (let k = 3; k < 10; k++) initialKeys.push(k);
-}
-
-if (localStorage.getItem("list")) {
-  console.log(JSON.parse(localStorage.getItem("list")));
-  initialTasks = JSON.parse(localStorage.getItem("list"));
-} else {
-  initialTasks = [
-    {
-      id: 0,
-      task: "wake up",
-      done: true,
-    },
-    {
-      id: 1,
-      task: "eat",
-      done: false,
-    },
-    {
-      id: 2,
-      task: "sleep",
-      done: false,
-    },
-  ];
-}
+const initialTasks = [
+  {
+    id: 0,
+    task: "wake up",
+    done: true,
+  },
+  {
+    id: 1,
+    task: "eat",
+    done: false,
+  },
+  {
+    id: 2,
+    task: "sleep",
+    done: false,
+  },
+];
 
 function App() {
   const [newTask, setNewTask] = useState("");
   const [deletePrompt, setDeletePrompt] = useState(null);
   const [allKeys, setAllKeys] = useState(initialKeys);
   const [list, setList] = useState(initialTasks);
+
+  useEffect(() => {
+    setAllKeys(JSON.parse(localStorage.getItem("allKeys")));
+  }, []);
+  useEffect(() => {
+    setList(JSON.parse(localStorage.getItem("list")));
+  }, []);
 
   function handleOnChange(id, check) {
     setList(
@@ -58,7 +52,6 @@ function App() {
         })
       )
     );
-    console.log(JSON.parse(localStorage.getItem("list")));
   }
 
   return (
@@ -94,13 +87,13 @@ function App() {
                   })
                 )
               );
-              console.log(JSON.parse(localStorage.getItem("list")));
+
               setAllKeys([...allKeys].slice(1));
               localStorage.setItem(
                 "allKeys",
                 JSON.stringify([...allKeys].slice(1))
               );
-              console.log(JSON.parse(localStorage.getItem("allKeys")));
+
               setNewTask("");
             }}
           >
@@ -179,14 +172,11 @@ function App() {
                           "list",
                           JSON.stringify(list.filter((k) => k.id !== i.id))
                         );
-                        console.log(JSON.parse(localStorage.getItem("list")));
+
                         setAllKeys([...allKeys].concat([i.id]));
                         localStorage.setItem(
                           "allKeys",
                           JSON.stringify([...allKeys].concat([i.id]))
-                        );
-                        console.log(
-                          JSON.parse(localStorage.getItem("allKeys"))
                         );
                       }}
                       style={{ opacity: "0.7" }}
