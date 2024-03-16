@@ -30,10 +30,12 @@ function App() {
   const [list, setList] = useState(initialTasks);
 
   useEffect(() => {
-    setAllKeys(JSON.parse(localStorage.getItem("allKeys")));
+    if (localStorage.getItem("allKeys"))
+      setAllKeys(JSON.parse(localStorage.getItem("allKeys")));
   }, []);
   useEffect(() => {
-    setList(JSON.parse(localStorage.getItem("list")));
+    if (localStorage.getItem("list"))
+      setList(JSON.parse(localStorage.getItem("list")));
   }, []);
 
   function handleOnChange(id, check) {
